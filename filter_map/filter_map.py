@@ -20,5 +20,5 @@ class FilterMapExercise:
         for i in input_array:
             is_successful, res = func(i)
             if is_successful:
-                result = result + [res]
+                result += [res]
         return result
