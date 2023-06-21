@@ -26,14 +26,14 @@ class FlaskExercise:
     В ответ должен вернуться статус 204
     """
 
-    db = {}
+    db: dict[str, str] = {}
 
     @staticmethod
     def configure_routes(app: Flask) -> None:
         pass
 
         @app.post("/user")
-        def create_user():
+        def create_user() -> tuple:
             try:
                 name = request.get_json()["name"]
             except KeyError:
@@ -45,14 +45,14 @@ class FlaskExercise:
                 return response, 201
 
         @app.get("/user/<username>")
-        def get_user(username):
+        def get_user(username: str) -> tuple:
             if FlaskExercise.db[username] == "deleted":
                 return "", 404
             response = {"data": f"My name is {username}"}
             return response, 200
 
         @app.patch("/user/<username>")
-        def update_user(username):
+        def update_user(username: str) -> tuple:
             name = request.get_json()["name"]
             FlaskExercise.db[username] = "deleted"
             FlaskExercise.db[name] = "created"
@@ -60,7 +60,6 @@ class FlaskExercise:
             return response, 200
 
         @app.delete("/user/<username>")
-        def delete_user(username):
+        def delete_user(username: str) -> tuple:
             FlaskExercise.db[username] = "deleted"
-            response = {"data": f"{username} deleted"}
             return "", 204
