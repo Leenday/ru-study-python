@@ -22,7 +22,7 @@ class MapExercise:
     def get_ratings(movie: dict) -> float:
         if not movie["rating_kinopoisk"]:
             return 0.0
-        if len(movie["country"].split(",")) >= 2 and float(movie["rating_kinopoisk"]) > 0:
+        if (movie["country"].count(',') + 1) >= 2 and float(movie["rating_kinopoisk"]) > 0:
             return float(movie["rating_kinopoisk"])
         else:
             return 0.0
