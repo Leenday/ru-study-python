@@ -46,20 +46,34 @@ class FlaskExercise:
 
         @app.get("/user/<username>")
         def get_user(username: str) -> tuple:
-            if FlaskExercise.db[username] == "deleted":
+            try:
+                FlaskExercise.db[username]
+            except KeyError:
                 return "", 404
-            response = {"data": f"My name is {username}"}
-            return response, 200
+            else:
+                response = {"data": f"My name is {username}"}
+                return response, 200
 
         @app.patch("/user/<username>")
         def update_user(username: str) -> tuple:
-            name = request.get_json()["name"]
-            FlaskExercise.db[username] = "deleted"
-            FlaskExercise.db[name] = "created"
-            response = {"data": f"My name is {name}"}
-            return response, 200
+            try:
+                name = request.get_json()["name"]
+            except KeyError:
+                return "username is required", 404
+            try:
+                FlaskExercise.db.pop(username)
+            except KeyError:
+                return "username doesn't exist"
+            else:
+                FlaskExercise.db[name] = "created"
+                response = {"data": f"My name is {name}"}
+                return response, 200
 
         @app.delete("/user/<username>")
         def delete_user(username: str) -> tuple:
-            FlaskExercise.db[username] = "deleted"
-            return "", 204
+            try:
+                FlaskExercise.db.pop(username)
+            except KeyError:
+                return "there is no user with this name", 404
+            else:
+                return "", 204
