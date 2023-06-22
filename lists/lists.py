@@ -19,20 +19,18 @@ class ListExercise:
         return list(map(lambda x: max_num if x > 0 else x, input_list))
 
     @staticmethod
-    def recurcive_search(input_list: list[int], query: int, indexes: list[int]) -> int:
+    def recurcive_search(input_list: list[int], query: int, start: int, end: int) -> int:
         if not input_list:
             return -1
-        list_center_index = int(len(input_list) / 2)
-        if len(input_list) == 1:
-            return indexes[0] if input_list[0] == query else -1
-        elif input_list[list_center_index] <= query:
-            return ListExercise.recurcive_search(
-                input_list[list_center_index:], query, indexes[list_center_index:]
-            )
-        elif input_list[list_center_index] > query:
-            return ListExercise.recurcive_search(
-                input_list[:list_center_index], query, indexes[:list_center_index]
-            )
+        center = (start + end) // 2
+        if input_list[center] == query:
+            return center
+        elif end - start <= 1:
+            return -1
+        elif input_list[center] <= query:
+            return ListExercise.recurcive_search(input_list, query, center, end)
+        elif input_list[center] > query:
+            return ListExercise.recurcive_search(input_list, query, start, center)
 
     @staticmethod
     def search(input_list: list[int], query: int) -> int:
@@ -45,4 +43,4 @@ class ListExercise:
         :return: Номер элемента
         """
         pass
-        return ListExercise.recurcive_search(input_list, query, list(range(len(input_list))))
+        return ListExercise.recurcive_search(input_list, query, 0, len(input_list))
