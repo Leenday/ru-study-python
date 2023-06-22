@@ -19,20 +19,20 @@ class MapExercise:
         return ratings_sum / movies_count
 
     @staticmethod
-    def get_ratings(movie: dict) -> list:
+    def get_ratings(movie: dict) -> float:
         if not movie["rating_kinopoisk"]:
-            return 0
+            return 0.0
         if len(movie["country"].split(",")) >= 2 and float(movie["rating_kinopoisk"]) > 0:
             return float(movie["rating_kinopoisk"])
         else:
-            return 0
+            return 0.0
 
     @staticmethod
     def calculate_ratings(ratings: list[float]) -> tuple:
-        movies_count = 0
-        rating_sum = 0
+        movies_count = 0.0
+        rating_sum = 0.0
         for i in ratings:
-            if i != 0:
+            if i != 0.0:
                 movies_count += 1
                 rating_sum += i
             else:
@@ -63,10 +63,10 @@ class MapExercise:
         return result
 
     @staticmethod
-    def get_movies(movie: dict, rating: Union[float, int]) -> list:
+    def get_movies(movie: dict, rating: Union[float, int]) -> str:
         if not movie["rating_kinopoisk"]:
-            return False
+            return ''
         if float(movie["rating_kinopoisk"]) >= rating:
             return movie["name"]
         else:
-            return False
+            return ''
