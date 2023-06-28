@@ -16,3 +16,9 @@ class FilterMapExercise:
         :return: Отфильтрованный список.
         """
         pass
+        result = []
+        for i in input_array:
+            is_successful, res = func(i)
+            if is_successful:
+                result.append(res)
+        return result
