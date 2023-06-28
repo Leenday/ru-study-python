@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 
 class FlaskExercise:
@@ -26,6 +26,54 @@ class FlaskExercise:
     В ответ должен вернуться статус 204
     """
 
+    db: dict[str, str] = {}
+
     @staticmethod
     def configure_routes(app: Flask) -> None:
         pass
+
+        @app.post("/user")
+        def create_user() -> tuple:
+            try:
+                name = request.get_json()["name"]
+            except KeyError:
+                response = {"errors": {"name": "This field is required"}}
+                return response, 422
+            else:
+                FlaskExercise.db[name] = "created"
+                response = {"data": f"User {name} is created!"}
+                return response, 201
+
+        @app.get("/user/<username>")
+        def get_user(username: str) -> tuple:
+            try:
+                FlaskExercise.db[username]
+            except KeyError:
+                return "", 404
+            else:
+                response = {"data": f"My name is {username}"}
+                return response, 200
+
+        @app.patch("/user/<username>")
+        def update_user(username: str) -> tuple:
+            try:
+                name = request.get_json()["name"]
+            except KeyError:
+                return "username is required", 404
+            try:
+                FlaskExercise.db.pop(username)
+            except KeyError:
+                return "username doesn't exist"
+            else:
+                FlaskExercise.db[name] = "created"
+                response = {"data": f"My name is {name}"}
+                return response, 200
+
+        @app.delete("/user/<username>")
+        def delete_user(username: str) -> tuple:
+            try:
+                FlaskExercise.db.pop(username)
+            except KeyError:
+                return "there is no user with this name", 404
+            else:
+                return "", 204
